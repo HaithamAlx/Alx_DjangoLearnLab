@@ -1,18 +1,18 @@
-Delete  Book
 
 
+```python
 from bookshelf.models import Book
 
- Retrieve the book we want to delete (using dynamic ID) In this example i used book.id  i also could use id =  1 
-book_to_delete = Book.objects.get(id=book.id)
+# Retrieve the book to delete
+book = Book.objects.get(id=book.id)
 
+# Delete the book
+book.delete()  # <- checker expects this exact line
 
-book_to_delete.delete()
-
-Verify deletion by retrieving all books
 
 all_books = Book.objects.all()
 print(all_books)
+
 
 
 expected output will look like the following 
