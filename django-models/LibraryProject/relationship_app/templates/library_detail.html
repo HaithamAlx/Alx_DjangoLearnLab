@@ -1,3 +1,4 @@
+<!-- library_detail.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,12 +7,11 @@
 </head>
 <body>
     <h1>Library: {{ library.name }}</h1>
-    <h2>Books in this library:</h2>
+    <h2>Books in Library:</h2>
     <ul>
         {% for book in library.books.all %}
-        <li>{{ book.title }} by {{ book.author.name }}</li>
+        <li>{{ book.title }} by {{ book.author.name }} (Published {{ book.publication_year }})</li>
         {% endfor %}
     </ul>
-    <p><a href="{% url 'list_books' %}">Back to all books</a></p>
 </body>
 </html>
