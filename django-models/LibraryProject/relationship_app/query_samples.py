@@ -30,3 +30,11 @@ for book in books_in_library:
 
 librarian = library.librarian
 print(f"\nLibrarian of {library_name}: {librarian.name}")
+
+
+author_name = "Haitham"
+author = Author.objects.get(name=author_name)
+books_by_author = Book.objects.filter(author=author)
+print(f"\nBooks by {author_name}:")
+for book in books_by_author:
+    print(book.title)
