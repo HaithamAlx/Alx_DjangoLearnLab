@@ -22,3 +22,7 @@ library2.books.add(book2, book3)
 # Create librarians (One-to-One)
 librarian1 = Librarian.objects.create(name="Librarian Haitham", library=library1)
 librarian2 = Librarian.objects.create(name="Librarian Mohamed", library=library2)
+
+print("All books in the database:")
+for book in Book.objects.all():
+    print(book.title)
