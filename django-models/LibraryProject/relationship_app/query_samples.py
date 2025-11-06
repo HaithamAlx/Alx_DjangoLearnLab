@@ -26,3 +26,7 @@ books_in_library = library.books.all()
 print(f"Books in {library_name}:")
 for book in books_in_library:
     print(book.title)
+
+
+librarian = library.librarian
+print(f"\nLibrarian of {library_name}: {librarian.name}")
