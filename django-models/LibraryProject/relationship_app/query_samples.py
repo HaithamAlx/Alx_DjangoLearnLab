@@ -1,28 +1,28 @@
-
 from relationship_app.models import Author, Book, Library, Librarian
 
 
-# Create authors
-Haitham = Author.objects.create(name="Haitham")
-Mohamed = Author.objects.create(name="Mohamed")
 
-# Create books
-book1 = Book.objects.create(title="Book1", author=Haitham)
-book2 = Book.objects.create(title="Book2", author=Haitham)
-book3 = Book.objects.create(title="Book3", author=Mohamed)
+Haitham = Author.objects.get_or_create(name="Haitham")[0]
+Mohamed = Author.objects.get_or_create(name="Mohamed")[0]
 
-# Create libraries
-library1 = Library.objects.create(name="Central Library")
-library2 = Library.objects.create(name="Community Library")
+book1 = Book.objects.get_or_create(title="Book1", author=Haitham)[0]
+book2 = Book.objects.get_or_create(title="Book2", author=Haitham)[0]
+book3 = Book.objects.get_or_create(title="Book3", author=Mohamed)[0]
 
-# Add books to libraries (Many-to-Many)
+library1 = Library.objects.get_or_create(name="Central Library")[0]
+library2 = Library.objects.get_or_create(name="Community Library")[0]
+
 library1.books.add(book1, book2)
 library2.books.add(book2, book3)
 
-# Create librarians (One-to-One)
-librarian1 = Librarian.objects.create(name="Librarian Haitham", library=library1)
-librarian2 = Librarian.objects.create(name="Librarian Mohamed", library=library2)
+librarian1 = Librarian.objects.get_or_create(name="Librarian Haitham", library=library1)[0]
+librarian2 = Librarian.objects.get_or_create(name="Librarian Mohamed", library=library2)[0]
 
-print("All books in the database:")
-for book in Book.objects.all():
+
+library_name = "Central Library"
+library = Library.objects.get(name=library_name)
+books_in_library = library.books.all()
+
+print(f"Books in {library_name}:")
+for book in books_in_library:
     print(book.title)
