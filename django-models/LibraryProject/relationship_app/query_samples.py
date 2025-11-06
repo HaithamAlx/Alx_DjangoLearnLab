@@ -28,13 +28,16 @@ for book in books_in_library:
     print(book.title)
 
 
-librarian = library.librarian
-print(f"\nLibrarian of {library_name}: {librarian.name}")
-
-
 author_name = "Haitham"
 author = Author.objects.get(name=author_name)
 books_by_author = Book.objects.filter(author=author)
 print(f"\nBooks by {author_name}:")
 for book in books_by_author:
     print(book.title)
+
+
+librarian = library.librarian
+print(f"\nLibrarian of {library_name}: {librarian.name}")
+
+librarian_from_model = Librarian.objects.get(library=library)
+print(f"Librarian of {library_name} (via Librarian model): {librarian_from_model.name}")
