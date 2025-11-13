@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings  # ✅ import settings to use AUTH_USER_MODEL
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -25,6 +25,7 @@ class Book(models.Model):
             ("can_delete_book", "Can delete a book"),
         ]
 
+
 class Library(models.Model):
     name = models.CharField(max_length=100)
     books = models.ManyToManyField(Book)
@@ -47,14 +48,16 @@ class UserProfile(models.Model):
         ('Librarian', 'Librarian'),
         ('Member', 'Member'),
     ]
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    # ✅ use the custom user model reference here
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='Member')
 
     def __str__(self):
         return f"{self.user.username} - {self.role}"
 
 
-@receiver(post_save, sender=User)
+# ✅ Update signal to use the custom user model dynamically
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
