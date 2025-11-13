@@ -10,20 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
-
-
 from pathlib import Path
-from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-# from .models import CustomUser, Book
-
-admin.site.register(Book)
-
-class CustomUserAdmin(UserAdmin):
-    model = CustomUser
-
-admin.site.register(CustomUser, CustomUserAdmin)
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
