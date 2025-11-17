@@ -1,0 +1,14 @@
+<h1>Books</h1>
+
+<ul>
+  {% for book in books %}
+    <li>{{ book.title|escape }} by {{ book.author|escape }}</li>
+  {% empty %}
+    <li>No books found.</li>
+  {% endfor %}
+</ul>
+
+
+{% if perms.bookshelf.can_create %}
+    <a href="{% url 'create_book' %}">Add New Book</a>
+{% endif %}
