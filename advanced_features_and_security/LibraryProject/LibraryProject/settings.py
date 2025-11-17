@@ -6,6 +6,9 @@ SECRET_KEY = 'django-insecure-r_8**#x+mel3&t3f1=b4m8bvu(^r(rfx-qxmt(o6q^3llrzalv
 DEBUG = False
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+
 # Security headers
 SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = 'DENY'
