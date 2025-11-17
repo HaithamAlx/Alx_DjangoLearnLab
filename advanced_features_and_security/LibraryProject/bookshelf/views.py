@@ -5,6 +5,7 @@ from django.core.exceptions import PermissionDenied
 
 from .models import Book
 from .forms import BookForm
+from .forms import ExampleForm
 
 
 @permission_required('bookshelf.can_edit', raise_exception=True)
