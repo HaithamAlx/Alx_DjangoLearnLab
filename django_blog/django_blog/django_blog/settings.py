@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-   
+    'blog', # THIS IS MY BLOG APP WHY ALX DOES NOT ACCEPT IT
 ]
 
 MIDDLEWARE = [
