@@ -2,9 +2,31 @@
 <link rel="stylesheet" href="{% static 'blog/auth.css' %}">
 
 <h2>{% if object %}Edit Post{% else %}New Post{% endif %}</h2>
+
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+    
+    {{ form.non_field_errors }}
+    
+    <p>
+        {{ form.title.label_tag }}<br>
+        {{ form.title }}
+        {{ form.title.errors }}
+    </p>
+    
+    <p>
+        {{ form.content.label_tag }}<br>
+        {{ form.content }}
+        {{ form.content.errors }}
+    </p>
+    
+    <p>
+        {{ form.tags.label_tag }}<br>
+        {{ form.tags }}
+        {{ form.tags.errors }}
+    </p>
+    
     <button type="submit">Save</button>
 </form>
+
 <a href="{% url 'post_list' %}">Cancel</a>
