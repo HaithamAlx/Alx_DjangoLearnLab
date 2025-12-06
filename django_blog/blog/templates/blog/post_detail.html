@@ -9,4 +9,28 @@
     <a href="{% url 'post_update' object.pk %}">Edit</a> |
     <a href="{% url 'post_delete' object.pk %}">Delete</a>
 {% endif %}
+
+<hr>
+<h3>Comments</h3>
+
+{% if user.is_authenticated %}
+    <a href="{% url 'add_comment' object.pk %}">Add a Comment</a>
+{% else %}
+    <p><a href="{% url 'login' %}">Login</a> to comment.</p>
+{% endif %}
+
+{% for comment in object.comments.all %}
+    <div style="border:1px solid #ccc; padding:8px; margin:5px 0;">
+        <p><strong>{{ comment.author.username }}</strong> | {{ comment.created_at|date:"Y-m-d H:i" }}</p>
+        <p>{{ comment.content }}</p>
+        {% if user == comment.author %}
+            <a href="{% url 'edit_comment' comment.pk %}">Edit</a> |
+            <a href="{% url 'delete_comment' comment.pk %}">Delete</a>
+        {% endif %}
+    </div>
+{% empty %}
+    <p>No comments yet.</p>
+{% endfor %}
+
+<hr>
 <a href="{% url 'post_list' %}">Back to All Posts</a>
