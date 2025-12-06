@@ -24,7 +24,7 @@ class ProfileUpdateForm(forms.ModelForm):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['title', 'content', 'tags']  # tags field added
+        fields = ['title', 'content', 'tags']  # include tags
         widgets = {
             'title': forms.TextInput(attrs={'placeholder': 'Enter post title'}),
             'content': forms.Textarea(attrs={'placeholder': 'Write your content here...'}),
