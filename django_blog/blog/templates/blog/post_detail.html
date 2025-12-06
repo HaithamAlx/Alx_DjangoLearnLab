@@ -1,0 +1,12 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'blog/auth.css' %}">
+
+<h2>{{ object.title }}</h2>
+<p>By {{ object.author.username }} | {{ object.created_at|date:"Y-m-d H:i" }}</p>
+<p>{{ object.content }}</p>
+
+{% if user == object.author %}
+    <a href="{% url 'post_update' object.pk %}">Edit</a> |
+    <a href="{% url 'post_delete' object.pk %}">Delete</a>
+{% endif %}
+<a href="{% url 'post_list' %}">Back to All Posts</a>
