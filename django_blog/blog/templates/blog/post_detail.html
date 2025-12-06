@@ -3,6 +3,16 @@
 
 <h2>{{ object.title }}</h2>
 <p>By {{ object.author.username }} | {{ object.created_at|date:"Y-m-d H:i" }}</p>
+
+<!-- Display tags -->
+<p>Tags:
+    {% for tag in object.tags.all %}
+        <a href="{% url 'posts_by_tag' tag.slug %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+    {% empty %}
+        No tags
+    {% endfor %}
+</p>
+
 <p>{{ object.content }}</p>
 
 {% if user == object.author %}

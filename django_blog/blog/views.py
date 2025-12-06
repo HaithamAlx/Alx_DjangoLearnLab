@@ -5,6 +5,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
+from django.db.models import Q
 
 from .forms import CustomUserCreationForm, ProfileUpdateForm, PostForm, CommentForm
 from .models import Post, Comment
@@ -43,7 +44,9 @@ def profile_view(request):
     return render(request, 'blog/profile.html', {'form': form})
 
 
-
+# -------------------------
+# Blog Post CRUD Views
+# -------------------------
 
 class PostListView(ListView):
     model = Post
@@ -86,6 +89,10 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         post = self.get_object()
         return self.request.user == post.author
 
+
+# -------------------------
+# Comment Views
+# -------------------------
 
 @login_required
 def add_comment(request, post_pk):
@@ -130,7 +137,6 @@ def delete_comment(request, comment_pk):
     return render(request, 'blog/comment_confirm_delete.html', {'comment': comment})
 
 
-
 class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
     form_class = CommentForm
@@ -168,3 +174,23 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def get_success_url(self):
         return self.object.post.get_absolute_url()
+
+
+
+
+def post_search_view(request):
+    query = request.GET.get('q', '')
+    results = Post.objects.none()
+    
+    if query:
+        results = Post.objects.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(tags__name__icontains=query)
+        ).distinct()
+    
+    context = {
+        'query': query,
+        'results': results
+    }
+    return render(request, 'blog/search_results.html', context)
