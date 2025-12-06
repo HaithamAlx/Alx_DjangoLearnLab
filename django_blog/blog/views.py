@@ -7,6 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.db.models import Q
 
+from taggit.models import Tag
 from .forms import CustomUserCreationForm, ProfileUpdateForm, PostForm, CommentForm
 from .models import Post, Comment
 
@@ -43,10 +44,6 @@ def profile_view(request):
         form = ProfileUpdateForm(instance=request.user)
     return render(request, 'blog/profile.html', {'form': form})
 
-
-# -------------------------
-# Blog Post CRUD Views
-# -------------------------
 
 class PostListView(ListView):
     model = Post
@@ -90,9 +87,6 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return self.request.user == post.author
 
 
-# -------------------------
-# Comment Views
-# -------------------------
 
 @login_required
 def add_comment(request, post_pk):
@@ -176,21 +170,37 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return self.object.post.get_absolute_url()
 
 
+class PostsByTagView(ListView):
+    model = Post
+    template_name = 'blog/post_list.html'
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        tag_slug = self.kwargs.get('tag_slug')
+        return Post.objects.filter(tags__slug=tag_slug).order_by('-created_at')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tag'] = self.kwargs.get('tag_slug')
+        return context
 
 
-def post_search_view(request):
-    query = request.GET.get('q', '')
-    results = Post.objects.none()
-    
-    if query:
-        results = Post.objects.filter(
-            Q(title__icontains=query) |
-            Q(content__icontains=query) |
-            Q(tags__name__icontains=query)
-        ).distinct()
-    
-    context = {
-        'query': query,
-        'results': results
-    }
-    return render(request, 'blog/search_results.html', context)
+class SearchResultsView(ListView):
+    model = Post
+    template_name = 'blog/search_results.html'
+    context_object_name = 'results'
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            return Post.objects.filter(
+                Q(title__icontains=query) |
+                Q(content__icontains=query) |
+                Q(tags__name__icontains=query)
+            ).distinct().order_by('-created_at')
+        return Post.objects.none()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['query'] = self.request.GET.get('q', '')
+        return context
