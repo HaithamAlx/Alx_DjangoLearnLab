@@ -1,6 +1,3 @@
-from django.shortcuts import render
-
-# Create your views here.
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -9,7 +6,6 @@ from django.contrib.auth import authenticate
 
 from .serializers import RegisterSerializer
 
-
 class RegisterView(APIView):
     permission_classes = [AllowAny]
 
@@ -17,7 +13,7 @@ class RegisterView(APIView):
         serializer = RegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        token = Token.objects.get(user=user)
+        token, _ = Token.objects.get_or_create(user=user)
         return Response({"token": token.key})
 
 
@@ -27,11 +23,9 @@ class LoginView(APIView):
     def post(self, request):
         username = request.data.get("username")
         password = request.data.get("password")
-
         user = authenticate(username=username, password=password)
         if not user:
             return Response({"error": "Invalid credentials"}, status=400)
-
         token, _ = Token.objects.get_or_create(user=user)
         return Response({"token": token.key})
 
